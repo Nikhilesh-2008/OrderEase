@@ -1,0 +1,22 @@
+=========================================
+               ORDEREASE                 
+    Smart Campus Canteen Management     
+=========================================
+Token Number : TK-106
+Order ID     : #6
+Customer     : NYBSL
+Date & Time  : 2026-10-20 12:59:35
+Status       : PLACED
+-----------------------------------------
+Item                     Qty      Price
+-----------------------------------------
+Veg Roll                   1      70.00
+Egg Fried Rice             1      90.00
+Full South Indian Meals Thali     1     110.00
+Sandwich                   1      60.00
+Burger                     2     160.00
+-----------------------------------------
+TOTAL AMOUNT: Rs. 490.00
+=========================================
+      Skip the Queue, Not the Food!      
+=========================================

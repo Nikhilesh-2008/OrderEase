@@ -1,0 +1,26 @@
+{
+    "id": "2DDED7EB",
+    "path": "D:/OrderEase/analytics/app.R",
+    "project_path": "analytics/app.R",
+    "type": "r_source",
+    "hash": "3351453602",
+    "contents": "",
+    "dirty": false,
+    "created": 1792478854335.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "1083,9",
+        "scrollLine": "1060"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1792480843,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1792480843423,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -1,0 +1,6 @@
+Order ID,Token,Customer,Items Ordered,Total Amount (INR),Order Time,Status
+#5,TK-105,Nikhilesh,French Fries x 1,50,20-10-2026 00:08,READY
+#4,TK-104,Nikhilesh,Chapati with Paneer Curry x 1,90,19-10-2026 23:42,COLLECTED
+#3,TK-103,Nikhilesh,Pizza x 1; Sandwich x 1; French Fries x 1; Veg Roll x 1,300,19-10-2026 21:53,COLLECTED
+#2,TK-102,Nikhilesh,Pizza x 1,120,13-10-2026 22:40,COLLECTED
+#1,TK-101,student_test,Burger x 2; French Fries x 1,210,13-10-2026 22:37,COLLECTED

@@ -1,0 +1,18 @@
+=========================================
+               ORDEREASE                 
+    Smart Campus Canteen Management     
+=========================================
+Token Number : TK-104
+Order ID     : #4
+Customer     : Nikhilesh
+Date & Time  : 2026-10-19 23:42:15
+Status       : PLACED
+-----------------------------------------
+Item                     Qty      Price
+-----------------------------------------
+Chapati with Paneer Curry     1      90.00
+-----------------------------------------
+TOTAL AMOUNT: Rs. 90.00
+=========================================
+      Skip the Queue, Not the Food!      
+=========================================

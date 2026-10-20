@@ -1,0 +1,18 @@
+=========================================
+               ORDEREASE                 
+    Smart Campus Canteen Management     
+=========================================
+Token Number : TK-107
+Order ID     : #7
+Customer     : Nikhilesh
+Date & Time  : 2026-10-20 13:00:11
+Status       : PLACED
+-----------------------------------------
+Item                     Qty      Price
+-----------------------------------------
+South Indian Filter Coffee     1      25.00
+-----------------------------------------
+TOTAL AMOUNT: Rs. 25.00
+=========================================
+      Skip the Queue, Not the Food!      
+=========================================
