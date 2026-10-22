@@ -58,15 +58,17 @@ get_order_data <- function() {
       o.total_amount,
       o.status,
       oi.item_id,
-      m.item_name,
-      oi.quantity,
-      oi.unit_price
+      COALESCE(m.item_name, 'Unknown Item') AS item_name,
+      COALESCE(m.canteen, 'Snacks & Shakes Corner') AS canteen,
+      COALESCE(m.category, 'Fast Food') AS category,
+      COALESCE(oi.quantity, 1) AS quantity,
+      COALESCE(oi.unit_price, o.total_amount) AS unit_price
     FROM orders o
     LEFT JOIN order_items oi
       ON o.order_id = oi.order_id
     LEFT JOIN menu m
       ON oi.item_id = m.item_id
-    ORDER BY o.order_time
+    ORDER BY o.order_time ASC
   "
   
   data <- dbGetQuery(con, sql)
@@ -75,8 +77,12 @@ get_order_data <- function() {
     
     data$order_time <- as.POSIXct(data$order_time)
     data$status <- as.character(data$status)
-    
     data$item_name[is.na(data$item_name)] <- "Unknown Item"
+    data$canteen <- as.character(data$canteen)
+    data$category <- as.character(data$category)
+    data$quantity <- as.numeric(data$quantity)
+    data$unit_price <- as.numeric(data$unit_price)
+    data$total_amount <- as.numeric(data$total_amount)
     
   }
   
@@ -218,6 +224,21 @@ ui <- fluidPage(
         margin-bottom: 20px;
       }
 
+      .chart-desc {
+        color: #B0BEC5;
+        font-size: 13px;
+        line-height: 1.5;
+        margin-top: 10px;
+        padding: 8px 12px;
+        background-color: rgba(18, 24, 38, 0.7);
+        border-left: 3px solid #FF914D;
+        border-radius: 4px;
+      }
+
+      .chart-desc strong {
+        color: #FF914D;
+      }
+
       .form-control {
         border-radius: 6px;
       }
@@ -290,8 +311,8 @@ ui <- fluidPage(
       dateRangeInput(
         "date_range",
         "Select Date Range",
-        start = Sys.Date() - 30,
-        end = Sys.Date(),
+        start = Sys.Date() - 60,
+        end = Sys.Date() + 1,
         format = "yyyy-mm-dd"
       ),
       
@@ -326,7 +347,7 @@ ui <- fluidPage(
         style = "font-weight:bold;color:#FF914D;"
       ),
       
-      p("OrderEase MySQL Database"),
+      p("OrderEase MySQL Database (orderease)"),
       
       p(
         "Visualizations created using R and ggplot2."
@@ -427,6 +448,12 @@ ui <- fluidPage(
             plotOutput(
               "daily_sales",
               height = "300px"
+            ),
+            
+            div(
+              class = "chart-desc",
+              tags$strong("What this graph explains: "),
+              "Plots daily gross revenue across calendar dates. It highlights revenue consistency and helps managers spot revenue surges during peak academic days or college events."
             )
             
           )
@@ -447,6 +474,12 @@ ui <- fluidPage(
             plotOutput(
               "popular_items",
               height = "300px"
+            ),
+            
+            div(
+              class = "chart-desc",
+              tags$strong("What this graph explains: "),
+              "Ranks the most frequently ordered items across campus canteens. Kitchen managers use this data to prioritize ingredient preparation and prevent stockouts for high-demand meals."
             )
             
           )
@@ -474,11 +507,50 @@ ui <- fluidPage(
             plotOutput(
               "order_status",
               height = "300px"
+            ),
+            
+            div(
+              class = "chart-desc",
+              tags$strong("What this graph explains: "),
+              "Visualizes the lifecycle distribution of orders (Placed, Preparing, Ready, Collected). Provides real-time visibility into kitchen turnaround speed and active queue clearance."
             )
             
           )
           
         ),
+        
+        column(
+          6,
+          
+          div(
+            class = "chart-box",
+            
+            h4(
+              "Revenue Share by Food Category",
+              class = "section-title"
+            ),
+            
+            plotOutput(
+              "category_donut",
+              height = "300px"
+            ),
+            
+            div(
+              class = "chart-desc",
+              tags$strong("What this graph explains: "),
+              "Shows the percentage of campus revenue generated across categories (Fast Food, Meals, Snacks, Beverages). Reveals which culinary segments drive the highest financial yield."
+            )
+            
+          )
+          
+        )
+        
+      ),
+      
+      
+      # ---------------- THIRD CHART ROW ----------------
+      
+      fluidRow(
         
         column(
           6,
@@ -494,6 +566,38 @@ ui <- fluidPage(
             plotOutput(
               "revenue_histogram",
               height = "300px"
+            ),
+            
+            div(
+              class = "chart-desc",
+              tags$strong("What this graph explains: "),
+              "Displays the frequency distribution of total order ticket amounts. Highlights typical student spending ranges (₹40 to ₹150) to assist in pricing meal combos."
+            )
+            
+          )
+          
+        ),
+        
+        column(
+          6,
+          
+          div(
+            class = "chart-box",
+            
+            h4(
+              "Campus Outlet Sales Comparison",
+              class = "section-title"
+            ),
+            
+            plotOutput(
+              "outlet_sales",
+              height = "300px"
+            ),
+            
+            div(
+              class = "chart-desc",
+              tags$strong("What this graph explains: "),
+              "Compares total generated revenue across campus outlets (Food Court, Snacks Corner, Chai & Juice Bar). Shows where student footfall generates the highest revenue to guide counter staffing."
             )
             
           )
@@ -503,12 +607,12 @@ ui <- fluidPage(
       ),
       
       
-      # ---------------- THIRD CHART ROW ----------------
+      # ---------------- FOURTH CHART ROW ----------------
       
       fluidRow(
         
         column(
-          12,
+          6,
           
           div(
             class = "chart-box",
@@ -520,7 +624,39 @@ ui <- fluidPage(
             
             plotOutput(
               "quantity_scatter",
-              height = "320px"
+              height = "300px"
+            ),
+            
+            div(
+              class = "chart-desc",
+              tags$strong("What this graph explains: "),
+              "Analyzes the relationship between items purchased in an order line and total revenue earned. Points situated higher up identify premium menu items compared to bulk affordable snacks."
+            )
+            
+          )
+          
+        ),
+        
+        column(
+          6,
+          
+          div(
+            class = "chart-box",
+            
+            h4(
+              "Peak Ordering Hours & Traffic",
+              class = "section-title"
+            ),
+            
+            plotOutput(
+              "hourly_traffic",
+              height = "300px"
+            ),
+            
+            div(
+              class = "chart-desc",
+              tags$strong("What this graph explains: "),
+              "Plots order volumes by hour of the day (24-hour campus time). Pinpoints lunch and evening tea rush hours to help kitchen staff manage preparation and break-time surges."
             )
             
           )
@@ -592,6 +728,23 @@ server <- function(input, output, session) {
   )
   
   
+  # ---------------- AUTO-ALIGN DATE RANGE ----------------
+  
+  observe({
+    data <- orders_data()
+    if (nrow(data) > 0) {
+      min_date <- as.Date(min(data$order_time, na.rm = TRUE))
+      max_date <- as.Date(max(data$order_time, na.rm = TRUE)) + 1
+      updateDateRangeInput(
+        session,
+        "date_range",
+        start = min_date,
+        end = max_date
+      )
+    }
+  })
+  
+  
   # ---------------- FILTER DATA ----------------
   
   filtered_data <- reactive({
@@ -607,7 +760,7 @@ server <- function(input, output, session) {
       length(input$date_range) != 2 ||
       any(is.na(input$date_range))
     ) {
-      return(data[0, ])
+      return(data)
     }
     
     start_date <- as.Date(input$date_range[1])
@@ -890,7 +1043,17 @@ server <- function(input, output, session) {
           color = NA
         ),
         
+        panel.background = element_rect(
+          fill = card_color,
+          color = NA
+        ),
+        
         legend.background = element_rect(
+          fill = card_color,
+          color = NA
+        ),
+        
+        legend.key = element_rect(
           fill = card_color,
           color = NA
         ),
@@ -904,11 +1067,73 @@ server <- function(input, output, session) {
         )
       )
     
-  })
+  }, bg = card_color)
   
   
   # ==========================================================
-  # CHART 4: REVENUE HISTOGRAM
+  # CHART 4: REVENUE SHARE BY FOOD CATEGORY (DOUGHNUT CHART)
+  # ==========================================================
+  
+  output$category_donut <- renderPlot({
+    
+    data <- filtered_data()
+    
+    validate(
+      need(
+        nrow(data) > 0,
+        "No category sales available."
+      )
+    )
+    
+    cat_data <- data %>%
+      filter(!is.na(category), !is.na(quantity), !is.na(unit_price)) %>%
+      mutate(item_revenue = quantity * unit_price) %>%
+      group_by(category) %>%
+      summarise(
+        revenue = sum(item_revenue, na.rm = TRUE),
+        .groups = "drop"
+      ) %>%
+      mutate(
+        percentage = revenue / sum(revenue) * 100,
+        label = paste0(category, "\n", round(percentage, 1), "%")
+      ) %>%
+      arrange(desc(revenue))
+    
+    validate(
+      need(
+        nrow(cat_data) > 0,
+        "No category revenue data available."
+      )
+    )
+    
+    ggplot(cat_data, aes(x = 2, y = revenue, fill = category)) +
+      geom_bar(stat = "identity", width = 1, color = card_color) +
+      coord_polar(theta = "y") +
+      xlim(0.5, 2.5) +
+      geom_text(
+        aes(label = label),
+        position = position_stack(vjust = 0.5),
+        color = "white",
+        size = 3.5,
+        fontface = "bold"
+      ) +
+      scale_fill_brewer(palette = "Set3") +
+      theme_void() +
+      theme(
+        plot.background = element_rect(fill = card_color, color = NA),
+        panel.background = element_rect(fill = card_color, color = NA),
+        legend.background = element_rect(fill = card_color, color = NA),
+        legend.key = element_rect(fill = card_color, color = NA),
+        legend.text = element_text(color = text_color),
+        legend.title = element_text(color = orange, face = "bold")
+      ) +
+      labs(fill = "Category")
+    
+  }, bg = card_color)
+  
+  
+  # ==========================================================
+  # CHART 5: REVENUE HISTOGRAM
   # ==========================================================
   
   output$revenue_histogram <- renderPlot({
@@ -938,6 +1163,16 @@ server <- function(input, output, session) {
         labels = label_number(prefix = "\u20B9 ")
       ) +
       
+      scale_y_continuous(
+        breaks = function(x) {
+          upper <- max(1, ceiling(max(x, na.rm = TRUE)))
+          step <- max(1, ceiling(upper / 5))
+          seq(0, upper, by = step)
+        },
+        labels = label_number(accuracy = 1),
+        expand = expansion(mult = c(0, 0.05))
+      ) +
+      
       labs(
         x = "Order Value",
         y = "Number of Orders"
@@ -949,7 +1184,69 @@ server <- function(input, output, session) {
   
   
   # ==========================================================
-  # CHART 5: QUANTITY VS ITEM REVENUE SCATTER PLOT
+  # CHART 6: CAMPUS OUTLET SALES COMPARISON (BAR CHART)
+  # ==========================================================
+  
+  output$outlet_sales <- renderPlot({
+    
+    data <- filtered_data()
+    
+    validate(
+      need(
+        nrow(data) > 0,
+        "No canteen outlet data available."
+      )
+    )
+    
+    outlet_data <- data %>%
+      filter(!is.na(canteen)) %>%
+      mutate(item_revenue = quantity * unit_price) %>%
+      group_by(canteen) %>%
+      summarise(
+        total_revenue = sum(item_revenue, na.rm = TRUE),
+        .groups = "drop"
+      ) %>%
+      arrange(desc(total_revenue))
+    
+    validate(
+      need(
+        nrow(outlet_data) > 0,
+        "No outlet sales data available."
+      )
+    )
+    
+    ggplot(outlet_data, aes(x = reorder(canteen, total_revenue), y = total_revenue, fill = canteen)) +
+      geom_col(width = 0.6) +
+      geom_text(
+        aes(label = paste0("\u20B9 ", format(round(total_revenue, 0), big.mark = ","))),
+        hjust = -0.15,
+        color = text_color,
+        size = 3.8,
+        fontface = "bold"
+      ) +
+      scale_fill_manual(values = c(
+        "Snacks & Shakes Corner" = orange,
+        "Chai & Juice Bar" = blue,
+        "Food Court (Meals & Tiffins)" = green,
+        "General" = "#A78BFA"
+      )) +
+      scale_y_continuous(
+        labels = label_number(prefix = "\u20B9 ", big.mark = ","),
+        expand = expansion(mult = c(0, 0.22))
+      ) +
+      coord_flip() +
+      labs(
+        x = "Campus Outlet",
+        y = "Total Revenue"
+      ) +
+      chart_theme() +
+      theme(legend.position = "none")
+    
+  }, bg = card_color)
+  
+  
+  # ==========================================================
+  # CHART 7: QUANTITY VS ITEM REVENUE SCATTER PLOT
   # ==========================================================
   
   output$quantity_scatter <- renderPlot({
@@ -997,6 +1294,53 @@ server <- function(input, output, session) {
   
   
   # ==========================================================
+  # CHART 8: PEAK ORDERING HOURS & TRAFFIC (AREA CHART)
+  # ==========================================================
+  
+  output$hourly_traffic <- renderPlot({
+    
+    data <- get_unique_orders(filtered_data())
+    
+    validate(
+      need(
+        nrow(data) > 0,
+        "No timestamp data available."
+      )
+    )
+    
+    hourly_data <- data %>%
+      mutate(hour = as.numeric(format(order_time, "%H"))) %>%
+      count(hour, name = "order_count")
+    
+    validate(
+      need(
+        nrow(hourly_data) > 0,
+        "No hourly order data available."
+      )
+    )
+    
+    ggplot(hourly_data, aes(x = hour, y = order_count)) +
+      geom_area(fill = orange, alpha = 0.25) +
+      geom_line(color = orange, linewidth = 1.2) +
+      geom_point(color = blue, size = 3.5) +
+      scale_x_continuous(
+        breaks = seq(0, 23, by = 3),
+        labels = function(h) sprintf("%02d:00", as.integer(h))
+      ) +
+      scale_y_continuous(
+        labels = label_number(accuracy = 1),
+        expand = expansion(mult = c(0, 0.2))
+      ) +
+      labs(
+        x = "Hour of Day (Campus Time)",
+        y = "Orders Placed"
+      ) +
+      chart_theme()
+    
+  }, bg = card_color)
+  
+  
+  # ==========================================================
   # ORDER DETAILS TABLE
   # ==========================================================
   
@@ -1031,6 +1375,8 @@ server <- function(input, output, session) {
         order_id,
         order_time,
         item_name,
+        canteen,
+        category,
         quantity,
         unit_price,
         total_amount,
@@ -1050,6 +1396,8 @@ server <- function(input, output, session) {
       "Order ID",
       "Order Time",
       "Food Item",
+      "Canteen Station",
+      "Category",
       "Quantity",
       "Unit Price (Rs.)",
       "Order Total (Rs.)",
@@ -1065,7 +1413,7 @@ server <- function(input, output, session) {
       filter = "top",
       
       options = list(
-        pageLength = 5,
+        pageLength = 6,
         scrollX = TRUE,
         autoWidth = TRUE
       )

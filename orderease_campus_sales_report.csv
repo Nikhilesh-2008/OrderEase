@@ -1,6 +1,10 @@
 Order ID,Token,Customer,Items Ordered,Total Amount (INR),Order Time,Status
-#5,TK-105,Nikhilesh,French Fries x 1,50,20-10-2026 00:08,READY
-#4,TK-104,Nikhilesh,Chapati with Paneer Curry x 1,90,19-10-2026 23:42,COLLECTED
-#3,TK-103,Nikhilesh,Pizza x 1; Sandwich x 1; French Fries x 1; Veg Roll x 1,300,19-10-2026 21:53,COLLECTED
-#2,TK-102,Nikhilesh,Pizza x 1,120,13-10-2026 22:40,COLLECTED
-#1,TK-101,student_test,Burger x 2; French Fries x 1,210,13-10-2026 22:37,COLLECTED
+#9,TK-109,"Nikhilesh","Egg Fried Rice x 4",360.00,2026-10-20 13:21:27,COLLECTED
+#8,TK-108,"Nikhil","Veg Roll x 3",210.00,2026-10-20 13:02:31,COLLECTED
+#7,TK-107,"Nikhilesh","South Indian Filter Coffee x 1",25.00,2026-10-20 13:00:11,COLLECTED
+#6,TK-106,"NYBSL","Veg Roll x 1; Egg Fried Rice x 1; Full South Indian Meals Thali x 1; Sandwich x 1; Burger x 2",490.00,2026-10-20 12:59:35,COLLECTED
+#5,TK-105,"Nikhilesh","French Fries x 1",50.00,2026-10-20 00:08:12,COLLECTED
+#4,TK-104,"Nikhilesh","Chapati with Paneer Curry x 1",90.00,2026-10-19 23:42:15,COLLECTED
+#3,TK-103,"Nikhilesh","Pizza x 1; Sandwich x 1; French Fries x 1; Veg Roll x 1",300.00,2026-10-19 21:53:07,COLLECTED
+#2,TK-102,"Nikhilesh","Pizza x 1",120.00,2026-10-13 22:40:46,COLLECTED
+#1,TK-101,"student_test","Burger x 2; French Fries x 1",210.00,2026-10-13 22:37:09,COLLECTED

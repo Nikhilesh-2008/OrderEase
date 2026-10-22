@@ -1,0 +1,18 @@
+=========================================
+               ORDEREASE                 
+    Smart Campus Canteen Management     
+=========================================
+Token Number : TK-114
+Order ID     : #14
+Customer     : Sowmya
+Date & Time  : 2026-10-22 20:01:08
+Status       : PLACED
+-----------------------------------------
+Item                     Qty      Price
+-----------------------------------------
+Fresh Watermelon Juice     3     120.00
+-----------------------------------------
+TOTAL AMOUNT: Rs. 120.00
+=========================================
+      Skip the Queue, Not the Food!      
+=========================================

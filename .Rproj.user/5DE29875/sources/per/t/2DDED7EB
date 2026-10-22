@@ -3,7 +3,7 @@
     "path": "D:/OrderEase/analytics/app.R",
     "project_path": "analytics/app.R",
     "type": "r_source",
-    "hash": "3351453602",
+    "hash": "835176143",
     "contents": "",
     "dirty": false,
     "created": 1792478854335.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "1083,9",
+        "cursorPosition": "1081,11",
         "scrollLine": "1060"
     },
     "folds": "",
-    "lastKnownWriteTime": 1792480843,
+    "lastKnownWriteTime": 1792683334,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1792480843423,
+    "last_content_update": 1792683334,
     "read_only": false,
     "read_only_alternatives": []
 }
